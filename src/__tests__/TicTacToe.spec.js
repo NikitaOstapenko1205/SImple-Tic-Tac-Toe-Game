@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import TicTacToe from '../app/TicTacToe';
+import TicTacToe from '../app/TicTacToe.jsx';
 import reducer from '../app/reducer';
 
 describe('Reducer tests', () => {
