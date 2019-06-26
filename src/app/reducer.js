@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 function checkWinner(field) {
   const lines = [
     [0, 1, 2],
@@ -34,10 +36,9 @@ export default (state, action) => {
         const newItem = oldItem === 'X' ? 'O' : 'X';
         const newField = _.set(state, `field[${action.id}].value`, oldItem);
         const { winItem, winNumbers } = checkWinner(newField.field);
-        if (!winNumbers.length) {
+        if (winNumbers.length > 0) {
           winNumbers.forEach(i => {
             newField.field[i].winItem = true;
-            console.log(newField.field[i].winItem);
           });
         }
         return { ...newField, currentItem: newItem, gameStatus: winItem };
@@ -48,6 +49,6 @@ export default (state, action) => {
       return { ...action.initialState };
     }
     default:
-      throw new Error();
+      return 'default';
   }
 };

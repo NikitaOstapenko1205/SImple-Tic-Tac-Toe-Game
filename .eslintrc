@@ -24,7 +24,7 @@
     "function-paren-newline": "off",
     "no-plusplus": "off",
     "space-before-function-paren": 0,
-    "import/extensions": ["error", "always", { "ignorePackages": true }],
+    "import/extensions": ["error", "never", { "ignorePackages": true }],
 
     "max-len": ["error", 100, 2, { "ignoreUrls": true }],
     "no-console": "off",

@@ -3,12 +3,12 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
-import _ from 'lodash';
 import useStyles from './style';
 import reducer from './reducer';
 
-function FormRow(props) {
-  const classes = useStyles();
+let classes;
+
+const FormRow = props => {
   const { rows, makeMove } = props;
   const addId = id => () => {
     makeMove({ type: 'MAKE_MOVE', id });
@@ -19,7 +19,7 @@ function FormRow(props) {
         <Grid key={item.id} item>
           <Paper
             onClick={addId(item.id)}
-            className={`${classes.paper} ${item.winItem ? classes.paperWin : ''}`}
+            className={`row-${item.id} ${classes.paper} ${item.winItem ? classes.paperWin : ''}`}
           >
             {item.value}
           </Paper>
@@ -27,9 +27,25 @@ function FormRow(props) {
       ))}
     </>
   );
-}
+};
 
-export default function TicTacToe() {
+const showModal = newGame => {
+  return (
+    <Modal
+      className={classes.modal}
+      aria-labelledby="simple-modal-title"
+      aria-describedby="simple-modal-description"
+      open
+      display="flex"
+    >
+      <Button onClick={newGame} size="large" className={classes.button} variant="outlined">
+        New Game
+      </Button>
+    </Modal>
+  );
+};
+
+export default () => {
   const initialState = {
     field: [
       { value: '', id: 0, winItem: false },
@@ -45,8 +61,9 @@ export default function TicTacToe() {
     currentItem: 'X',
     gameStatus: 'inProcess'
   };
+
   const [state, dispatch] = useReducer(reducer, initialState);
-  const classes = useStyles();
+  classes = useStyles();
 
   const newGame = () => {
     dispatch({ type: 'MAKE_NEW_GAME', initialState });
@@ -73,14 +90,7 @@ export default function TicTacToe() {
   return (
     <>
       {getTitle()}
-      <Grid
-        className={classes.root}
-        maxWidth={1440}
-        container
-        justify="center"
-        alignItems="center"
-        spacing={2}
-      >
+      <Grid className={classes.root} container justify="center" alignItems="center" spacing={2}>
         <Grid container justify="center" alignItems="center" item md={8} spacing={4}>
           <FormRow makeMove={dispatch} rows={state.field.filter(item => item.id < 3)} />
         </Grid>
@@ -94,19 +104,7 @@ export default function TicTacToe() {
           <FormRow makeMove={dispatch} rows={state.field.filter(item => item.id >= 6)} />
         </Grid>
       </Grid>
-      {state.gameStatus !== 'inProcess' && (
-        <Modal
-          className={classes.modal}
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open
-          display="flex"
-        >
-          <Button onClick={newGame} size="large" className={classes.button} variant="outlined">
-            New Game
-          </Button>
-        </Modal>
-      )}
+      {state.gameStatus !== 'inProcess' && showModal(newGame)}
     </>
   );
-}
+};

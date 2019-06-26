@@ -8,7 +8,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
 import ImageMinPlugin from 'imagemin-webpack-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 
@@ -85,7 +85,10 @@ module.exports = {
   ],
   optimization: {
     minimizer: [
-      new UglifyJSPlugin({ sourceMap: true }),
+      new TerserPlugin({
+        cache: true,
+        parallel: true,
+      }),
       new ImageMinPlugin({
         test: /\.(png|jpe?g|gif|svg)$/
       }),
